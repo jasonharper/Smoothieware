@@ -10,7 +10,7 @@ beta_steps_per_mm                            80               # Steps per mm for
 gamma_steps_per_mm                           1600             # Steps per mm for gamma stepper
 
 # Planner module configuration : Look-ahead and acceleration configuration
-planner_queue_size                           32               # Size of the planning queue, must be a power of 2. 128 seems to be the maximum.
+planner_queue_size                           32               # Size of the planning queue DO NOT CHANGE THIS UNLESS YOU KNOW EXACLTY WHAT YOU ARE DOING
 acceleration                                 3000             # Acceleration in mm/second/second.
 acceleration_ticks_per_second                1000             # Number of times per second the speed is updated
 junction_deviation                           0.05             # Similar to the old "max_jerk", in millimeters, see : https://github.com/grbl/grbl/blob/master/planner.c#L409
@@ -96,16 +96,22 @@ temperature_control.bed.set_m_code           140              #
 temperature_control.bed.set_and_wait_m_code  190              #
 temperature_control.bed.designator           B                #
 
+#temperature_control.bed.bang_bang            false            # set to true to use bang bang control rather than PID
+#temperature_control.bed.hysteresis           2.0              # set to the temperature in degrees C to use as hysteresis when using bang bang
+
 # Switch module for fan control
 switch.fan.enable                            true             #
 switch.fan.input_on_command                  M106             #
 switch.fan.input_off_command                 M107             #
 switch.fan.output_pin                        2.6              #
+switch.fan.output_type                       pwm              # pwm output settable with S parameter in the input_on_comand
+#switch.fan.max_pwm                           255              # set max pwm for the pin default is 255
 
 #switch.misc.enable                           true             #
 #switch.misc.input_on_command                 M42              #
 #switch.misc.input_off_command                M43              #
 #switch.misc.output_pin                       2.4              #
+#switch.misc.output_type                      digital          # just an on or off pin
 
 # Switch module for spindle control
 #switch.spindle.enable                        false            #
@@ -161,7 +167,8 @@ panel.encoder_b_pin                          3.26!^            # encoder pin
 #panel.encoder_b_pin                         3.26!^            # encoder pin         ; GLCD EXP2 Pin 5
 #panel.click_button_pin                      1.30!^            # click button        ; GLCD EXP1 Pin 2
 #panel.buzz_pin                              1.31              # pin for buzzer      ; GLCD EXP1 Pin 1
-#panel.button_pause_pin                      2.11^             # kill/pause          ; GLCD EXP2 Pin 8
+#panel.button_pause_pin                      2.11^             # kill/pause          ; GLCD EXP2 Pin 8 either
+#panel.back_button_pin                       2.11!^            # back button         ; GLCD EXP2 Pin 8 or
 
 # pins used with other panels
 #panel.up_button_pin                         0.1!              # up button if used
@@ -197,7 +204,7 @@ network.enable                               false            # enable the ether
 network.webserver.enable                     true             # enable the webserver
 network.telnet.enable                        true             # enable the telnet server
 network.ip_address                           auto             # use dhcp to get ip address
-# uncomment the 3 below to manually setup ip address 
+# uncomment the 3 below to manually setup ip address
 #network.ip_address                           192.168.3.222    # the IP address
 #network.ip_mask                              255.255.255.0    # the ip mask
 #network.ip_gateway                           192.168.3.1      # the gateway address

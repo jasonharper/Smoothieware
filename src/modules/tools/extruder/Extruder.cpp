@@ -13,6 +13,15 @@
 #include "modules/robot/Conveyor.h"
 #include "modules/robot/Block.h"
 #include "StepperMotor.h"
+#include "SlowTicker.h"
+#include "Stepper.h"
+#include "StepTicker.h"
+#include "Config.h"
+#include "StepperMotor.h"
+#include "Robot.h"
+#include "checksumm.h"
+#include "ConfigValue.h"
+#include "Gcode.h"
 
 #include <mri.h>
 

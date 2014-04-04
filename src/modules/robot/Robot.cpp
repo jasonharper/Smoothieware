@@ -20,12 +20,17 @@ using std::string;
 #include "StepperMotor.h"
 #include "Gcode.h"
 #include "PublicDataRequest.h"
+#include "RobotPublicAccess.h"
 #include "arm_solutions/BaseSolution.h"
 #include "arm_solutions/CartesianSolution.h"
 #include "arm_solutions/RotatableCartesianSolution.h"
 #include "arm_solutions/RostockSolution.h"
 #include "arm_solutions/JohannKosselSolution.h"
 #include "arm_solutions/HBotSolution.h"
+#include "StepTicker.h"
+#include "checksumm.h"
+#include "utils.h"
+#include "ConfigValue.h"
 
 #define  default_seek_rate_checksum          CHECKSUM("default_seek_rate")
 #define  default_feed_rate_checksum          CHECKSUM("default_feed_rate")
@@ -398,10 +403,11 @@ void Robot::on_gcode_received(void * argument){
                 gcode->mark_as_taken();
                 break;
 
-            case 665: // M665 set optional arm solution variables based on arm solution
+            case 665: // M665 set optional arm solution variables based on arm solution. NOTE these are not saved with M500
                 gcode->mark_as_taken();
-                // the parameter args could be any letter so try each one
+                // the parameter args could be any letter except S so try each one
                 for(char c='A';c<='Z';c++) {
+                    if(c == 'S') continue; // used for segments per second
                     float v;
                     bool supported= arm_solution->get_optional(c, &v); // retrieve current value if supported
 
@@ -414,8 +420,11 @@ void Robot::on_gcode_received(void * argument){
                         gcode->add_nl = true;
                     }
                 }
+                // set delta segments per second
+                if(gcode->has_letter('S')) {
+                    this->delta_segments_per_second= gcode->get_value('S');
+                }
                 break;
-
         }
     }
 

@@ -8,7 +8,7 @@
 #ifndef temperaturecontrol_h
 #define temperaturecontrol_h
 
-#include "libs/Pin.h"
+#include "Module.h"
 #include "Pwm.h"
 #include <math.h>
 
@@ -80,6 +80,7 @@ class TemperatureControl : public Module {
         Pin  thermistor_pin;
         Pwm  heater_pin;
 
+        bool use_bangbang;
         bool waiting;
         bool min_temp_violated;
 
@@ -94,6 +95,7 @@ class TemperatureControl : public Module {
         void setPIDi(float i);
         void setPIDd(float d);
 
+        float hysteresis;
         float iTerm;
         float lastInput;
         // PID settings
